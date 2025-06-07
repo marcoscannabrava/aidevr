@@ -180,24 +180,3 @@ class TestAIDevrAgent:
         agent.coder.assert_called_once()  # Only called once for first task
         agent.analyzer.assert_called_once()  # Only called once for first task
 
-
-class TestIntegration:
-    """Integration tests using dummy LM."""
-
-    def test_dummy_lm_integration(self):
-        """Test the agent with dummy LM to verify basic flow."""
-        lm = dspy.LM(model="dummy-model")
-        agent = AIDevrAgent(lm)
-
-        # This should run without errors (though with dummy output)
-        with patch("builtins.print"):  # Suppress output for test
-            try:
-                agent.run("Create a simple hello world program")
-                # If we get here, the basic flow works
-                assert True
-            except Exception as e:
-                pytest.fail(f"Integration test failed: {e}")
-
-
-if __name__ == "__main__":
-    pytest.main([__file__, "-v"])

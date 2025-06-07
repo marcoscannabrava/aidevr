@@ -25,10 +25,8 @@ The agent uses three core DSPy reasoning modules:
 ```
 ai-coder-agent/
 ├── ai_coder_agent.py          # Main agent implementation
-├── demo_simple_workflow.py    # Working demo without DSPy dependencies
 ├── tests/                     # Test suite
 │   ├── __init__.py
-│   ├── test_core_functions.py # Core functionality tests
 │   ├── test_ai_coder_agent.py # Full unit tests
 │   └── test_integration.py    # Integration tests
 ├── pyproject.toml             # Project configuration and dependencies
