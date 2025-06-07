@@ -114,32 +114,6 @@ aidevr "Build a web scraper with error handling and rate limiting" \
   --verbose
 ```
 
-## Demo
-
-Run the simplified demo to see the agent workflow:
-
-```bash
-python demo_simple_workflow.py
-```
-
-This shows how the agent works conceptually with mock LLM responses.
-
-## Development
-
-### Setup Development Environment
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/ai-coder-agent.git
-cd ai-coder-agent
-
-# Install with development dependencies using uv
-uv pip install -e ".[dev]"
-
-# Or using pip
-pip install -e ".[dev]"
-```
-
 ### Testing
 
 ```bash
