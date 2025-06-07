@@ -47,7 +47,7 @@ class TestEndToEndIntegration:
     
     def test_agent_with_simple_goal(self):
         """Test agent with a simple, achievable goal using dummy LM."""
-        lm = dspy.Dummy(model="dummy-model")
+        lm = dspy.LM(model="dummy-model")
         agent = AICoderAgent(lm)
         
         # Capture stdout to avoid cluttering test output
@@ -73,7 +73,7 @@ class TestRealWorldScenarios:
     
     def test_file_creation_scenario(self):
         """Test a scenario where the agent should create a file."""
-        lm = dspy.Dummy(model="dummy-model")
+        lm = dspy.LM(model="dummy-model")
         agent = AICoderAgent(lm)
         
         # Use a temporary directory

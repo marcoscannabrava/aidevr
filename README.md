@@ -38,23 +38,14 @@ ai-coder-agent/
 
 ## Installation
 
-### Using UV (Recommended)
-
 ```bash
-# Install uv if you haven't already
-curl -LsSf https://astral.sh/uv/install.sh | sh
+uv install -e .
 
-# Install the project
-uv pip install -e .
+# install with development dependencies:
+# uv pip install -e ".[dev]"
 
-# Or install with development dependencies
-uv pip install -e ".[dev]"
-```
-
-### Using pip
-
-```bash
-pip install -e .
+# or using pip:
+# pip install -e .
 ```
 
 ## Usage

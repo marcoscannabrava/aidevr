@@ -4,12 +4,12 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ai-coder-agent"
-version = "1.0.0"
-description = "An intelligent Python agent that generates, executes, and refines code using DSPy framework"
+version = "0.1.0"
+description = "An intelligent AI agent that generates, executes, and refines code."
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
-    {name = "AI Coder Agent Team"}
+    {name = "Marcos Cannabrava"}
 ]
 keywords = ["ai", "coding", "agent", "dspy", "automation", "code-generation"]
 classifiers = [

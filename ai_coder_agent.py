@@ -31,21 +31,21 @@ class Analysis(BaseModel):
 
 class GeneratePlan(dspy.Signature):
     """Decompose the high-level goal into a sequence of concrete coding tasks."""
-    goal: dspy.InputField(desc="The overall objective for the AI Coder.")
-    plan: dspy.OutputField(cls=Plan)
+    goal: str = dspy.InputField(desc="The overall objective for the AI Coder.")
+    plan: Plan = dspy.OutputField(cls=Plan)
 
 class GenerateCode(dspy.Signature):
     """Write Python code to accomplish a single task based on the plan and context."""
-    task_description: dspy.InputField(desc="The specific task to be implemented in code.")
-    context: dspy.InputField(desc="Relevant context, such as previous code, file listings, or error messages from prior steps.")
-    code: dspy.OutputField(prefix="```python\n", suffix="\n```")
+    task_description: str = dspy.InputField(desc="The specific task to be implemented in code.")
+    context: str = dspy.InputField(desc="Relevant context, such as previous code, file listings, or error messages from prior steps.")
+    code: str = dspy.OutputField(prefix="```python\n", suffix="\n```")
 
 class AnalyzeResult(dspy.Signature):
     """Evaluate if the executed code successfully completed its task and achieved the intended outcome."""
-    task_description: dspy.InputField(desc="The original description of the task.")
-    code: dspy.InputField(desc="The Python code that was executed.")
-    execution_log: dspy.InputField(desc="The captured stdout and stderr from the code execution.")
-    analysis: dspy.OutputField(cls=Analysis)
+    task_description: str = dspy.InputField(desc="The original description of the task.")
+    code: str = dspy.InputField(desc="The Python code that was executed.")
+    execution_log: str = dspy.InputField(desc="The captured stdout and stderr from the code execution.")
+    analysis: Analysis = dspy.OutputField(cls=Analysis)
 
 
 # --- 3. Safe Code Execution ---
@@ -237,12 +237,12 @@ def main(goal: str, api_key: str, model: str, max_tokens: int, timeout: int, ver
         click.echo("⚠️  " + click.style("Warning:", fg="yellow", bold=True) + 
                    " OPENAI_API_KEY not found.")
         click.echo("Using a dummy LLM. The agent will produce placeholder text.")
-        lm = dspy.Dummy(model="dummy-model")
+        lm = dspy.LM(model="dummy-model")
     else:
         if verbose:
             click.echo("🔑 " + click.style("API key found.", fg="green", bold=True) + 
                        f" Configuring LLM with model: {model}")
-        lm = dspy.OpenAI(model=model, api_key=api_key, max_tokens=max_tokens)
+        lm = dspy.LM(model=model, api_key=api_key, max_tokens=max_tokens)
 
     # Create and run agent
     agent = AICoderAgent(lm)
