@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Integration tests for the AI Coder Agent.
+Integration tests for the AI Developer Agent.
 """
 
 import pytest
@@ -8,7 +8,7 @@ import os
 import tempfile
 import subprocess
 import sys
-from ai_coder_agent import AICoderAgent
+from ai_coder_agent import AIDevrAgent
 import dspy
 
 
@@ -48,7 +48,7 @@ class TestEndToEndIntegration:
     def test_agent_with_simple_goal(self):
         """Test agent with a simple, achievable goal using dummy LM."""
         lm = dspy.LM(model="dummy-model")
-        agent = AICoderAgent(lm)
+        agent = AIDevrAgent(lm)
         
         # Capture stdout to avoid cluttering test output
         import io
@@ -74,7 +74,7 @@ class TestRealWorldScenarios:
     def test_file_creation_scenario(self):
         """Test a scenario where the agent should create a file."""
         lm = dspy.LM(model="dummy-model")
-        agent = AICoderAgent(lm)
+        agent = AIDevrAgent(lm)
         
         # Use a temporary directory
         with tempfile.TemporaryDirectory() as temp_dir:

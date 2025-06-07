@@ -1,7 +1,7 @@
 # Initial Prompt from Gemini 2.5
 You are an expert Python developer specializing in building agentic systems with the DSPy framework.
 
-Your task is to write a complete, self-contained Python script that implements an 'AI Coder' agent. The agent will take a high-level coding goal and iteratively generate, execute, and refine code to achieve it.
+Your task is to write a complete, self-contained Python script that implements an 'AI Developer' agent. The agent will take a high-level coding goal and iteratively generate, execute, and refine code to achieve it.
 
 **Agent Logic:**
 
@@ -39,13 +39,13 @@ The agent operates in a loop, orchestrated by a main Python function. You must i
 
 # Initial code proposed by Gemini
 
-Of course. As a specialist in agentic systems with DSPy, I will construct a complete, self-contained Python script for an 'AI Coder' agent.
+Of course. As a specialist in agentic systems with DSPy, I will construct a complete, self-contained Python script for an 'AI Developer' agent.
 
 This script will include:
 1.  **Pydantic Models** for structured data (`Plan`, `Analysis`).
 2.  **DSPy Signatures** for the core reasoning modules (`GeneratePlan`, `GenerateCode`, `AnalyzeResult`).
 3.  A safe **code execution environment** using `subprocess`.
-4.  An **orchestration class** (`AICoderAgent`) that manages the plan-code-execute-analyze loop.
+4.  An **orchestration class** (`AIDevrAgent`) that manages the plan-code-execute-analyze loop.
 5.  A **command-line interface** using `argparse` for easy use.
 
 Here is the complete and self-contained script:
@@ -84,7 +84,7 @@ class Analysis(BaseModel):
 
 class GeneratePlan(dspy.Signature):
     """Decompose the high-level goal into a sequence of concrete coding tasks."""
-    goal: dspy.InputField(desc="The overall objective for the AI Coder.")
+    goal: dspy.InputField(desc="The overall objective for the AI Developer.")
     plan: dspy.OutputField(cls=Plan)
 
 class GenerateCode(dspy.Signature):
@@ -162,10 +162,10 @@ def extract_code(llm_output: str) -> str:
     return llm_output.strip()
 
 
-# --- 4. The AI Coder Agent ---
+# --- 4. The AI Developer Agent ---
 # This class orchestrates the entire process, from planning to execution.
 
-class AICoderAgent:
+class AIDevrAgent:
     def __init__(self, lm: dspy.LM):
         """Initializes the agent with its reasoning modules."""
         dspy.settings.configure(lm=lm)
@@ -245,7 +245,7 @@ class AICoderAgent:
 # --- 5. Main Execution Block & CLI ---
 def main():
     """Main function to parse arguments and run the agent."""
-    parser = argparse.ArgumentParser(description="An AI Coder agent powered by DSPy.")
+    parser = argparse.ArgumentParser(description="An AI Developer agent powered by DSPy.")
     parser.add_argument("goal", type=str, help="The high-level coding goal for the agent.")
     parser.add_argument("--api-key", type=str, default=os.getenv("OPENAI_API_KEY"), help="OpenAI API key.")
     parser.add_argument("--model", type=str, default="gpt-3.5-turbo", help="The language model to use (e.g., 'gpt-4o', 'gpt-3.5-turbo').")
@@ -261,7 +261,7 @@ def main():
         # Configure the DSPy language model
         lm = dspy.OpenAI(model=args.model, api_key=args.api_key, max_tokens=2000)
 
-    agent = AICoderAgent(lm)
+    agent = AIDevrAgent(lm)
     agent.run(args.goal)
 
 if __name__ == "__main__":

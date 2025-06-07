@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Unit tests for the AI Coder Agent.
+Unit tests for the AI Developer Agent.
 """
 
 import pytest
@@ -15,7 +15,7 @@ from ai_coder_agent import (
     AnalyzeResult,
     execute_code,
     extract_code,
-    AICoderAgent,
+    AIDevrAgent,
 )
 import dspy
 
@@ -96,8 +96,8 @@ class TestDSPySignatures:
         assert hasattr(sig, "analysis")
 
 
-class TestAICoderAgent:
-    """Test the main AICoderAgent class."""
+class TestAIDevrAgent:
+    """Test the main AIDevrAgent class."""
 
     @pytest.fixture
     def mock_lm(self):
@@ -106,12 +106,12 @@ class TestAICoderAgent:
 
     @pytest.fixture
     def agent(self, mock_lm):
-        """Create an AICoderAgent instance with mock LM."""
-        return AICoderAgent(mock_lm)
+        """Create an AIDevrAgent instance with mock LM."""
+        return AIDevrAgent(mock_lm)
 
     def test_agent_initialization(self, mock_lm):
         """Test agent initialization."""
-        agent = AICoderAgent(mock_lm)
+        agent = AIDevrAgent(mock_lm)
         assert agent.planner is not None
         assert agent.coder is not None
         assert agent.analyzer is not None
@@ -187,7 +187,7 @@ class TestIntegration:
     def test_dummy_lm_integration(self):
         """Test the agent with dummy LM to verify basic flow."""
         lm = dspy.LM(model="dummy-model")
-        agent = AICoderAgent(lm)
+        agent = AIDevrAgent(lm)
 
         # This should run without errors (though with dummy output)
         with patch("builtins.print"):  # Suppress output for test

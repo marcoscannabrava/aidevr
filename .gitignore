@@ -166,7 +166,7 @@ cython_debug/
 .uv/
 uv.lock
 
-# AI Coder Agent specific
+# AI Developer Agent specific
 temp_agent_code.py
 agent_output.txt
 test_output.txt

@@ -48,7 +48,7 @@ test = [
 ]
 
 [project.scripts]
-aicoder = "ai_coder_agent:main"
+aidevr = "ai_coder_agent:main"
 
 [project.urls]
 Homepage = "https://github.com/yourusername/ai-coder-agent"

@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-# Filename: ai_coder_agent.py
-
 import dspy
 import os
 import subprocess
@@ -8,11 +6,9 @@ import sys
 import re
 import click
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List
 
 # --- 1. Pydantic Models for Structured Output ---
-# These models define the expected structure for the outputs of our LLM calls,
-# ensuring predictable and parsable results.
 
 class Plan(BaseModel):
     """A structured plan to achieve a coding goal."""
@@ -26,12 +22,10 @@ class Analysis(BaseModel):
 
 
 # --- 2. DSPy Signatures for Reasoning Modules ---
-# These signatures define the inputs and outputs for each reasoning step of our agent.
-# DSPy uses these to prompt the underlying LLM.
 
 class GeneratePlan(dspy.Signature):
     """Decompose the high-level goal into a sequence of concrete coding tasks."""
-    goal: str = dspy.InputField(desc="The overall objective for the AI Coder.")
+    goal: str = dspy.InputField(desc="The overall objective for the AI Developer.")
     plan: Plan = dspy.OutputField(cls=Plan)
 
 class GenerateCode(dspy.Signature):
@@ -109,10 +103,10 @@ def extract_code(llm_output: str) -> str:
     return llm_output.strip()
 
 
-# --- 4. The AI Coder Agent ---
+# --- 4. The AI Developer Agent ---
 # This class orchestrates the entire process, from planning to execution.
 
-class AICoderAgent:
+class AIDevrAgent:
     def __init__(self, lm: dspy.LM):
         """Initializes the agent with its reasoning modules."""
         dspy.settings.configure(lm=lm)
@@ -211,17 +205,17 @@ class AICoderAgent:
               help='Enable verbose output')
 def main(goal: str, api_key: str, model: str, max_tokens: int, timeout: int, verbose: bool):
     """
-    AI Coder Agent - Generate, execute, and refine code to achieve coding goals.
+    AI Developer Agent - Generate, execute, and refine code to achieve coding goals.
     
     GOAL: High-level description of what you want the agent to accomplish.
     
     Examples:
     
-        aicoder "Create a hello world program"
+        aidevr "Create a hello world program"
         
-        aicoder "Write a script to fetch weather data and save to CSV" --model gpt-4o
+        aidevr "Write a script to fetch weather data and save to CSV" --model gpt-4o
         
-        aicoder "Build a simple calculator with error handling" --verbose
+        aidevr "Build a simple calculator with error handling" --verbose
     """
     # Configure output verbosity
     if verbose:
@@ -245,7 +239,7 @@ def main(goal: str, api_key: str, model: str, max_tokens: int, timeout: int, ver
         lm = dspy.LM(model=model, api_key=api_key, max_tokens=max_tokens)
 
     # Create and run agent
-    agent = AICoderAgent(lm)
+    agent = AIDevrAgent(lm)
     
     try:
         agent.run(goal)
@@ -263,14 +257,14 @@ def main(goal: str, api_key: str, model: str, max_tokens: int, timeout: int, ver
 # --- Additional CLI Commands ---
 @click.group()
 def cli():
-    """AI Coder Agent CLI"""
+    """AI Developer Agent CLI"""
     pass
 
 
 @cli.command()
 def version():
     """Show version information."""
-    click.echo("AI Coder Agent v1.0.0")
+    click.echo("AI Developer Agent v1.0.0")
     click.echo("Built with DSPy framework")
 
 
@@ -292,7 +286,7 @@ def config(output_format):
         import json
         click.echo(json.dumps(config_data, indent=2))
     else:
-        click.echo("🔧 AI Coder Agent Configuration:")
+        click.echo("🔧 AI Developer Agent Configuration:")
         click.echo(f"   API Key: {'✓ Set' if config_data['api_key_set'] else '✗ Not set'}")
         click.echo(f"   Default Model: {config_data['default_model']}")
         click.echo(f"   Default Timeout: {config_data['default_timeout']}s")

@@ -1,4 +1,4 @@
-# AI Coder Agent
+# AI Developer Agent
 
 An intelligent Python agent built with DSPy framework that takes high-level coding goals and iteratively generates, executes, and refines code to achieve them.
 
@@ -39,34 +39,28 @@ ai-coder-agent/
 ## Installation
 
 ```bash
-uv install -e .
-
-# install with development dependencies:
-# uv pip install -e ".[dev]"
-
-# or using pip:
-# pip install -e .
+pip install aidevr
 ```
 
 ## Usage
 
 ### Command Line Interface
 
-The agent is available as `aicoder` command after installation:
+The agent is available as `aidevr` command after installation:
 
 ```bash
 # Basic usage with environment API key
 export OPENAI_API_KEY='your-api-key'
-aicoder "Create a Python file that calculates fibonacci numbers"
+aidevr "Create a Python file that calculates fibonacci numbers"
 
 # Using dummy LLM (for testing)
-aicoder "Create a simple hello world program"
+aidevr "Create a simple hello world program"
 
 # With specific model and verbose output
-aicoder "Write a web scraper" --model gpt-4o --verbose
+aidevr "Write a web scraper" --model gpt-4o --verbose
 
 # With custom timeout and token limits
-aicoder "Build a data analysis script" --timeout 120 --max-tokens 3000
+aidevr "Build a data analysis script" --timeout 120 --max-tokens 3000
 ```
 
 ### CLI Options
@@ -85,35 +79,35 @@ Options:
 
 ```bash
 # Show version information
-aicoder version
+aidevr version
 
 # Show current configuration
-aicoder config
+aidevr config
 
 # Show configuration in JSON format
-aicoder config --format json
+aidevr config --format json
 ```
 
 ### Examples
 
 **Simple file creation:**
 ```bash
-aicoder "Create a Python file named 'greetings.py' that prints 'Hello, Agent!'"
+aidevr "Create a Python file named 'greetings.py' that prints 'Hello, Agent!'"
 ```
 
 **API interaction:**
 ```bash
-aicoder "Write a script that fetches current time from worldtimeapi.org and saves it to 'time.txt'" --verbose
+aidevr "Write a script that fetches current time from worldtimeapi.org and saves it to 'time.txt'" --verbose
 ```
 
 **Data processing:**
 ```bash
-aicoder "Create a script that reads a CSV file and calculates statistics" --model gpt-4o
+aidevr "Create a script that reads a CSV file and calculates statistics" --model gpt-4o
 ```
 
 **Complex task with custom settings:**
 ```bash
-aicoder "Build a web scraper with error handling and rate limiting" \
+aidevr "Build a web scraper with error handling and rate limiting" \
   --model gpt-4o \
   --max-tokens 4000 \
   --timeout 180 \
