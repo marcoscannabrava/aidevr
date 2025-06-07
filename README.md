@@ -143,64 +143,8 @@ pip install -e ".[dev]"
 ### Testing
 
 ```bash
-# Run all tests
 uv run pytest
-
-# Run specific test file
-uv run pytest tests/test_core_functions.py
-
-# Run with coverage
-uv run pytest --cov=. --cov-report=html
-
-# Run core function tests directly
-python tests/test_core_functions.py
 ```
-
-### Code Quality
-
-```bash
-# Format code
-uv run black .
-
-# Sort imports
-uv run isort .
-
-# Lint code
-uv run flake8
-
-# Type checking
-uv run mypy ai_coder_agent.py
-```
-
-## Technical Details
-
-### Safe Code Execution
-
-- Code runs in separate subprocess with 60-second timeout
-- Captures both stdout and stderr
-- Automatic cleanup of temporary files
-- No access to parent process environment
-
-### Structured Output
-
-Uses Pydantic models for predictable LLM responses:
-
-```python
-class Plan(BaseModel):
-    description: str
-    tasks: List[str]
-
-class Analysis(BaseModel):
-    description: str
-    completed: bool
-```
-
-### Error Handling
-
-- Graceful handling of code execution errors
-- Timeout protection for infinite loops
-- Validation of LLM outputs
-- Fallback mechanisms for malformed responses
 
 ## Known Issues
 
@@ -209,20 +153,6 @@ class Analysis(BaseModel):
 - Generated code runs with full system permissions (use with caution)
 - CLI entry point may not work due to DSPy import issues (use `python ai_coder_agent.py` as fallback)
 
-## Working Components
-
-✅ **Core Functions**: All core functionality tested and working  
-✅ **Demo Workflow**: Complete agent workflow demonstration available  
-✅ **Test Suite**: Comprehensive tests for all components  
-✅ **Modern Tooling**: UV package manager and Click CLI interface  
-✅ **Safe Execution**: Isolated subprocess execution with timeouts
-
-## Contributing
-
-1. Test core functions: `python test_core_functions.py`
-2. Run demo: `python demo_simple_workflow.py`
-3. Ensure all tests pass before submitting changes
-
 ## License
 
-MIT License - Feel free to use and modify.
+GPL3 - use as you want, keep it open source
