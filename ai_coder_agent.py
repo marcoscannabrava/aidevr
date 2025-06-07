@@ -6,7 +6,7 @@ import os
 import subprocess
 import sys
 import re
-import argparse
+import click
 from pydantic import BaseModel, Field
 from typing import List, Optional
 
@@ -189,27 +189,115 @@ class AICoderAgent:
         print("\n🎉 \033[1;32mAll tasks completed. Agent finished successfully!\033[0m")
 
 
-# --- 5. Main Execution Block & CLI ---
-def main():
-    """Main function to parse arguments and run the agent."""
-    parser = argparse.ArgumentParser(description="An AI Coder agent powered by DSPy.")
-    parser.add_argument("goal", type=str, help="The high-level coding goal for the agent.")
-    parser.add_argument("--api-key", type=str, default=os.getenv("OPENAI_API_KEY"), help="OpenAI API key.")
-    parser.add_argument("--model", type=str, default="gpt-3.5-turbo", help="The language model to use (e.g., 'gpt-4o', 'gpt-3.5-turbo').")
+# --- 5. CLI Interface with Click ---
+@click.command()
+@click.argument('goal', type=str)
+@click.option('--api-key', 
+              default=lambda: os.getenv("OPENAI_API_KEY"), 
+              help='OpenAI API key (defaults to OPENAI_API_KEY env var)')
+@click.option('--model', 
+              default="gpt-3.5-turbo", 
+              help='Language model to use (e.g., gpt-4o, gpt-3.5-turbo)')
+@click.option('--max-tokens', 
+              default=2000, 
+              type=int,
+              help='Maximum tokens for LLM responses')
+@click.option('--timeout', 
+              default=60, 
+              type=int,
+              help='Code execution timeout in seconds')
+@click.option('--verbose', 
+              is_flag=True, 
+              help='Enable verbose output')
+def main(goal: str, api_key: str, model: str, max_tokens: int, timeout: int, verbose: bool):
+    """
+    AI Coder Agent - Generate, execute, and refine code to achieve coding goals.
+    
+    GOAL: High-level description of what you want the agent to accomplish.
+    
+    Examples:
+    
+        aicoder "Create a hello world program"
+        
+        aicoder "Write a script to fetch weather data and save to CSV" --model gpt-4o
+        
+        aicoder "Build a simple calculator with error handling" --verbose
+    """
+    # Configure output verbosity
+    if verbose:
+        click.echo(f"🔧 Configuration:")
+        click.echo(f"   Model: {model}")
+        click.echo(f"   Max tokens: {max_tokens}")
+        click.echo(f"   Timeout: {timeout}s")
+        click.echo(f"   API key: {'✓ Set' if api_key else '✗ Not set'}")
+        click.echo()
 
-    args = parser.parse_args()
-
-    if not args.api_key:
-        print("⚠️ \033[1;33mWarning:\033[0m OPENAI_API_KEY not found in environment or command-line arguments.")
-        print("Using a dummy LLM. The agent will produce placeholder text.")
+    # Configure LLM
+    if not api_key:
+        click.echo("⚠️  " + click.style("Warning:", fg="yellow", bold=True) + 
+                   " OPENAI_API_KEY not found.")
+        click.echo("Using a dummy LLM. The agent will produce placeholder text.")
         lm = dspy.Dummy(model="dummy-model")
     else:
-        print(f"🔑 \033[1;32mAPI key found. Configuring LLM with model:\033[0m {args.model}")
-        # Configure the DSPy language model
-        lm = dspy.OpenAI(model=args.model, api_key=args.api_key, max_tokens=2000)
+        if verbose:
+            click.echo("🔑 " + click.style("API key found.", fg="green", bold=True) + 
+                       f" Configuring LLM with model: {model}")
+        lm = dspy.OpenAI(model=model, api_key=api_key, max_tokens=max_tokens)
 
+    # Create and run agent
     agent = AICoderAgent(lm)
-    agent.run(args.goal)
+    
+    try:
+        agent.run(goal)
+    except KeyboardInterrupt:
+        click.echo("\n🛑 " + click.style("Agent interrupted by user.", fg="red"))
+        sys.exit(1)
+    except Exception as e:
+        click.echo(f"\n❌ " + click.style("Agent failed:", fg="red") + f" {e}")
+        if verbose:
+            import traceback
+            traceback.print_exc()
+        sys.exit(1)
+
+
+# --- Additional CLI Commands ---
+@click.group()
+def cli():
+    """AI Coder Agent CLI"""
+    pass
+
+
+@cli.command()
+def version():
+    """Show version information."""
+    click.echo("AI Coder Agent v1.0.0")
+    click.echo("Built with DSPy framework")
+
+
+@cli.command()
+@click.option('--format', 'output_format', 
+              type=click.Choice(['text', 'json']), 
+              default='text',
+              help='Output format')
+def config(output_format):
+    """Show current configuration."""
+    config_data = {
+        "api_key_set": bool(os.getenv("OPENAI_API_KEY")),
+        "default_model": "gpt-3.5-turbo",
+        "default_timeout": 60,
+        "default_max_tokens": 2000
+    }
+    
+    if output_format == 'json':
+        import json
+        click.echo(json.dumps(config_data, indent=2))
+    else:
+        click.echo("🔧 AI Coder Agent Configuration:")
+        click.echo(f"   API Key: {'✓ Set' if config_data['api_key_set'] else '✗ Not set'}")
+        click.echo(f"   Default Model: {config_data['default_model']}")
+        click.echo(f"   Default Timeout: {config_data['default_timeout']}s")
+        click.echo(f"   Default Max Tokens: {config_data['default_max_tokens']}")
+
 
 if __name__ == "__main__":
     main()
