@@ -43,7 +43,6 @@ class AnalyzeResult(dspy.Signature):
 
 
 # --- 3. Safe Code Execution ---
-# This function handles the execution of LLM-generated code in a sandboxed manner.
 
 def execute_code(code: str, filename: str = "temp_agent_code.py") -> str:
     """
@@ -104,14 +103,14 @@ def extract_code(llm_output: str) -> str:
 
 
 # --- 4. The AI Developer Agent ---
-# This class orchestrates the entire process, from planning to execution.
 
 class AIDevrAgent:
+    """Orchestrator class"""
+
     def __init__(self, lm: dspy.LM):
         """Initializes the agent with its reasoning modules."""
         dspy.settings.configure(lm=lm)
         
-        # Use dspy.Predict for simpler, direct prompting
         self.planner = dspy.Predict(GeneratePlan)
         self.coder = dspy.Predict(GenerateCode)
         self.analyzer = dspy.Predict(AnalyzeResult)
