@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import dspy
 import os
 import subprocess

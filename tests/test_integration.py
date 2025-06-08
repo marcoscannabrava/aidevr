@@ -1,8 +1,3 @@
-#!/usr/bin/env python
-"""
-Integration tests for the AI Developer Agent.
-"""
-
 import pytest
 import os
 import tempfile

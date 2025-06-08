@@ -1,8 +1,3 @@
-#!/usr/bin/env python
-"""
-Unit tests for the AI Developer Agent.
-"""
-
 import pytest
 import os
 from unittest.mock import Mock, patch
